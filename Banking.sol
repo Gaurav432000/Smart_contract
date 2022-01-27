@@ -16,10 +16,9 @@ contract banking{
     function deposit() public payable accountExists {
         require(msg.value > 0, "value of deposit can not be zero");    
     }
-    function withdraw() public payable accountExists {
-        require(msg.value>0);
-        require(msg.value<address(this).balance);
-        msg.sender.transfer(msg.value);
+    function withdraw(uint value) public payable accountExists {
+        require(value>0);
+        msg.sender.transfer(value);
     }
     function transferether(address payable receiveraddress,uint amount) public payable accountExists {
         receiveraddress.transfer(amount);
