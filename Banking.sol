@@ -14,17 +14,19 @@ contract banking{
         userexists[msg.sender] = true;
     }
     function deposit() public payable accountExists {
-        require(msg.value > 0, "value of deposit can not be zero");    
+        require(msg.value > 0, "value of deposit can not be zero");
+        accountBalance[msg.sender] += msg.value;    
     }
     function withdraw(uint value) public payable accountExists {
         require(value>0);
         msg.sender.transfer(value);
+        accountBalance[msg.sender] -= value;
     }
     function transferether(address payable receiveraddress,uint amount) public payable accountExists {
         receiveraddress.transfer(amount);
     }
     function userBalance() public view returns(uint) {
-        return address(this).balance;   
+        return accountBalance[msg.sender];   
     }
     /// In place accountExists function i have created an modifier for same purpose
     /// i have made mapping userexists public instead of seprate function
