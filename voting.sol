@@ -2,10 +2,15 @@
 pragma solidity >=0.5.0 <0.8.0;
 
 contract voting{
-    uint public winner;
+    address public moderator;
     uint id;
     uint[] u;
+    modifier onlymoderator(address _address) {
+        require(msg.sender == _address);
+        _;
+    }
     constructor() public {
+        moderator = msg.sender;
         id = 1;
     }
     struct partcipant {
@@ -16,7 +21,7 @@ contract voting{
     mapping(uint => partcipant) vid;
     
 
-    function addpartcipant(address _a) public returns(bool) {
+    function addpartcipant(address _a) public onlymoderator(moderator) returns(bool) {
         require(vid[id].added == false);
         u.push(id);
         vid[id].a = _a;
@@ -30,8 +35,8 @@ contract voting{
         vid[add].votes++;
         return vid[add].a;
     }
-    function winnerd() public
-    {
+    function winnerd() public view returns(uint)
+    {   uint winner;
         uint v = 0;
         for (uint i = 0; i < u.length; i++) 
         {
@@ -41,5 +46,6 @@ contract voting{
                 winner = i;
             }
         }
+        return winner;
     }
 }
