@@ -6,8 +6,8 @@ contract voting{
     uint id;
     uint[] u;
     bool allowed;
-    modifier onlyowner(address _address) {
-        require(msg.sender == _address);
+    modifier onlyowner() {
+        require(msg.sender == moderators[0] );
         _;
     }
         
@@ -22,7 +22,7 @@ contract voting{
     }
     uint x;
     mapping(uint => partcipant) vid;
-    function addmoderators(address _m) public payable onlyowner(msg.sender) {
+    function addmoderators(address _m) public payable onlyowner() {
         moderators.push(_m);
     }
     
