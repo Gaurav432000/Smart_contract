@@ -2,15 +2,17 @@
 pragma solidity >=0.5.0 <0.8.0;
 
 contract voting{
-    address public moderator;
+    address[] public moderators;
     uint id;
     uint[] u;
-    modifier onlymoderator(address _address) {
+    bool allowed;
+    modifier onlyowner(address _address) {
         require(msg.sender == _address);
         _;
     }
+        
     constructor() public {
-        moderator = msg.sender;
+        moderators.push(msg.sender);
         id = 1;
     }
     struct partcipant {
@@ -18,17 +20,28 @@ contract voting{
         uint votes;
         bool added;
     }
+    uint x;
     mapping(uint => partcipant) vid;
+    function addmoderators(address _m) public payable onlyowner(msg.sender) {
+        moderators.push(_m);
+    }
     
-
-    function addpartcipant(address _a) public onlymoderator(moderator) returns(bool) {
-        require(vid[id].added == false);
-        u.push(id);
-        vid[id].a = _a;
-        vid[id].votes = 0;
-        vid[id].added = true;
-        id++;
-        return true;
+    function addpartcipant(address _a) public returns(bool) 
+    {
+        for(uint i=0; i<moderators.length; i++)
+        {
+            if(msg.sender == moderators[i])
+            {
+            require(vid[id].added == false);
+            u.push(id);
+            vid[id].a = _a;
+            vid[id].votes = 0;
+            vid[id].added = true;
+            id++;
+            return true;
+            }
+        }
+        
     }
     function vote(uint votingid) public returns(address){
         uint add = u[votingid];
