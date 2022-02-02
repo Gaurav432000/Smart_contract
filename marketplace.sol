@@ -3,7 +3,8 @@ pragma solidity >=0.5.0 <0.8.0;
 
 contract marketplace {
 
-    address[] public sellers;
+    address[] sellers;
+    uint[] public bought;
     
     struct item 
     {
@@ -27,7 +28,7 @@ contract marketplace {
 
     mapping(uint => item) selling;
     mapping(address => uint[]) itemsbought;
-    uint[] public itemb;
+    uint[] itemb;
     
     function listitem(string memory _name,uint _id, uint _cost) public 
     {
@@ -55,11 +56,11 @@ contract marketplace {
             }
         }
     }
-    /*function myorders()  view public
+    function myorders() public 
     { 
         for(uint i=1; i<itemsbought[msg.sender].length; i++)
         {
-        itemb[i];
-        }
-    }*/
+        bought.push(itemsbought[msg.sender][i]);
+        } 
+    }
 }
