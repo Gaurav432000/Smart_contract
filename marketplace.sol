@@ -2,9 +2,8 @@
 pragma solidity >=0.5.0 <0.8.0;
 
 contract marketplace {
-
+    bool isseller;
     address[] sellers;
-    uint[] public bought;
     
     struct item 
     {
@@ -30,19 +29,24 @@ contract marketplace {
     mapping(address => uint[]) itemsbought;
     uint[] itemb;
     
-    function listitem(string memory _name,uint _id, uint _cost) public 
+    function checkseller() public 
     {
-        for(uint i=0; i<sellers.length; i++)
+         for(uint i=0; i<sellers.length; i++)
         {
             if(msg.sender == sellers[i])
             {
+                isseller =true;
+            }
+        }
+    }
+    function listitem(string memory _name,uint _id, uint _cost) public 
+    {
+            require(isseller == true , "only seller can list items");
             selling[itemno].name = _name;
             selling[itemno].id = _id;
             selling[itemno].cost = _cost;
             selling[itemno].time = block.timestamp;
             itemno++;
-            }
-        }
     }
 
     function buyitem(uint _id) public payable 
@@ -56,11 +60,8 @@ contract marketplace {
             }
         }
     }
-    function myorders() public 
+    function myorders(uint i) view public returns(uint[] memory )
     { 
-        for(uint i=1; i<itemsbought[msg.sender].length; i++)
-        {
-        bought.push(itemsbought[msg.sender][i]);
-        } 
+        return itemb[i];
     }
 }
